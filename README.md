@@ -8,22 +8,25 @@
   - recomandări bazate pe valoarea per unitate
   - alertă de preț în timp real via WebSocket
   
-    Structură Proiect
-  src
-  ├── main
-  │ ├── java/com.project.PriceComparator
-  │ │ ├── controller # REST API endpoints
-  │ │ ├── service # Logica aplicației
-  │ │ ├── dto # Obiecte DTO folosite în request/response
-  │ │ ├── model # Modele interne (ex. Product)
-  │ │ ├── scheduler # Verificare periodică pentru alerte
-  │ │ └── websocket # Handler pentru WebSocket
-  │ └── resources
-  │ ├── application.properties
-  │ └── data/ # Fișierele CSV cu prețuri și reduceri
-  └── test
-  ├── java/com.project.PriceComparator
-  └── resources/data/ # Fișiere CSV de test
+## Structură Proiect
+
+```text
+src
+├── main
+│   ├── java/com.project.PriceComparator
+│   │   ├── controller         # REST API endpoints
+│   │   ├── service            # Logica aplicației
+│   │   ├── dto                # Obiecte DTO (request/response)
+│   │   ├── model              # Entități interne
+│   │   ├── scheduler          # Task programat pt. alerte
+│   │   └── websocket          # Notificări via WebSocket
+│   └── resources
+│       ├── application.properties
+│       └── data/              # Fișiere CSV cu prețuri și reduceri
+└── test
+    ├── java/com.project.PriceComparator
+    └── resources/data/        # Fișiere CSV de test
+```
 
   ii. Cum se construiește și rulează aplicația
     1. Clonare:
