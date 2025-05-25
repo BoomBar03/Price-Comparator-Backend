@@ -1,6 +1,15 @@
 // src/main/java/com/project/PriceComparator/scheduler/PriceAlertScheduler.java
 package com.project.PriceComparator.scheduler;
 
+/*
+ * PriceAlertScheduler verifică periodic (la fiecare 10 secunde) dacă prețul unui produs
+ * a scăzut sub un prag setat de utilizator (targetPrice).
+ * Caută în fișierele CSV de tipul {store}_{date}.csv din folderul "data/".
+ * Dacă prețul unui produs corespunde alertei, trimite o notificare prin WebSocket
+ * către utilizatorul respectiv și marchează alerta ca declanșată pentru a evita duplicatele.
+ */
+
+
 import com.project.PriceComparator.websocket.PriceAlertHandler;
 import com.project.PriceComparator.websocket.PriceAlertHandler.Alert;
 import org.springframework.core.io.ClassPathResource;

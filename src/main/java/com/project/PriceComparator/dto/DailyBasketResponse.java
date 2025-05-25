@@ -1,5 +1,12 @@
 package com.project.PriceComparator.dto;
 
+/*
+ * DailyBasketResponse reprezintă răspunsul sistemului pentru un singur produs.
+ * Include informații despre magazinul selectat, prețul unitar, cantitatea,
+ * și prețul total (unitPrice * quantity).
+ */
+
+
 public class DailyBasketResponse {
     private String productName;
     private String storeName;
@@ -34,4 +41,7 @@ public class DailyBasketResponse {
     public double getTotalPrice() {
         return totalPrice;
     }
+
+    public double getPrice() { return totalPrice; }
+
 }

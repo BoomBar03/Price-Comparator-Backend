@@ -32,7 +32,7 @@ public class BestValueService {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         new ClassPathResource(folderPath + fileName).getInputStream()));
 
-                String line = reader.readLine(); // skip header
+                String line = reader.readLine();
                 while ((line = reader.readLine()) != null) {
                     String[] values = line.split(";");
 

@@ -33,7 +33,7 @@ public class PriceHistoryService {
                 if (store != null && !storeName.equalsIgnoreCase(store)) continue;
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource(folderPath + fileName).getInputStream()));
-                String line = reader.readLine(); // skip header
+                String line = reader.readLine();
 
                 while ((line = reader.readLine()) != null) {
                     String[] values = line.split(";");
