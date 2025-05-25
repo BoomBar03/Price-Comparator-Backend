@@ -15,8 +15,7 @@
 	<description>Price Comparator project for Spring Boot</description>
 	<url/>
 	<licenses>
-		<license/>
-	</licenses>
+		</licenses>
 	<developers>
 		<developer/>
 	</developers>
@@ -38,7 +37,8 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>1.18.30</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
