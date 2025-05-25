@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -41,7 +42,7 @@ public class DiscountService {
 
                 Map<String, Double> oldPrices = readOldPrices(folderPath + priceFileName);
                 List<BestDiscountResponse> storeDiscounts = readDiscountsForFile(
-                        folderPath + discountFileName, storeName, oldPrices
+                        folderPath + discountFileName, storeName, oldPrices, null
                 );
                 discounts.addAll(storeDiscounts);
 
@@ -53,6 +54,46 @@ public class DiscountService {
         discounts.sort(Comparator.comparingDouble(BestDiscountResponse::getDiscountPercent).reversed());
 
         return discounts.stream().limit(limit).toList();
+    }
+
+    public List<BestDiscountResponse> getNewDiscounts(LocalDate referenceDate) {
+        List<BestDiscountResponse> newDiscounts = new ArrayList<>();
+        String folderPath = "data/";
+        String basePath;
+
+        try {
+            basePath = new ClassPathResource(folderPath).getFile().getPath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return newDiscounts;
+        }
+
+        File folder = new File(basePath);
+        File[] files = folder.listFiles((dir, name) -> name.matches(".*_discounts_\\d{4}-\\d{2}-\\d{2}\\.csv"));
+
+        if (files == null) return newDiscounts;
+
+        for (File discountFile : files) {
+            String discountFileName = discountFile.getName();
+
+            try {
+                String[] parts = discountFileName.replace(".csv", "").split("_discounts_");
+                String storeName = parts[0];
+                String date = parts[1];
+                String priceFileName = storeName + "_" + date + ".csv";
+
+                Map<String, Double> oldPrices = readOldPrices(folderPath + priceFileName);
+                List<BestDiscountResponse> storeDiscounts = readDiscountsForFile(
+                        folderPath + discountFileName, storeName, oldPrices, referenceDate
+                );
+                newDiscounts.addAll(storeDiscounts);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return newDiscounts;
     }
 
     private Map<String, Double> readOldPrices(String priceFilePath) {
@@ -74,7 +115,8 @@ public class DiscountService {
     }
 
     private List<BestDiscountResponse> readDiscountsForFile(String discountFilePath, String storeName,
-                                                            Map<String, Double> oldPrices) {
+                                                            Map<String, Double> oldPrices,
+                                                            LocalDate referenceDate) {
         List<BestDiscountResponse> result = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 new ClassPathResource(discountFilePath).getInputStream()))) {
@@ -85,6 +127,11 @@ public class DiscountService {
                 String productId = values[0].trim();
                 String productName = values[1].trim();
                 double discountPercent = Double.parseDouble(values[8].trim());
+                LocalDate fromDate = LocalDate.parse(values[6].trim());
+
+                if (referenceDate != null && fromDate.isBefore(referenceDate.minusDays(1))) {
+                    continue; // ignoră reducerile mai vechi de 24h
+                }
 
                 if (oldPrices.containsKey(productId)) {
                     double oldPrice = oldPrices.get(productId);
