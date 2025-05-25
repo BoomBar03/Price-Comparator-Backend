@@ -69,7 +69,7 @@ public class DiscountService {
         }
 
         File folder = new File(basePath);
-        File[] files = folder.listFiles((dir, name) -> name.matches(".*_discounts_\\d{4}-\\d{2}-\\d{2}\\.csv"));
+        File[] files = folder.listFiles((dir, name) -> name.matches(".*_discounts_\\d{4}-\\d{2}-\\d{2}\\.csv"));    //cautam daor in fisierele care contin cuvantul "discounts"
 
         if (files == null) return newDiscounts;
 
@@ -101,7 +101,7 @@ public class DiscountService {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 new ClassPathResource(priceFilePath).getInputStream()))) {
 
-            String line = reader.readLine(); // skip header
+            String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(";");
                 String productId = values[0].trim();
@@ -121,7 +121,7 @@ public class DiscountService {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 new ClassPathResource(discountFilePath).getInputStream()))) {
 
-            String line = reader.readLine(); // skip header
+            String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(";");
                 String productId = values[0].trim();
@@ -135,7 +135,7 @@ public class DiscountService {
 
                 if (oldPrices.containsKey(productId)) {
                     double oldPrice = oldPrices.get(productId);
-                    double newPrice = oldPrice * (1 - discountPercent / 100.0);
+                    double newPrice = oldPrice * (1 - discountPercent / 100.0); //calculam si noul pret pentru a fi mai usor utilizatorului de a vizualiza reducerea
 
                     result.add(new BestDiscountResponse(
                             productName,
